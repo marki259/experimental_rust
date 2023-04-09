@@ -1,12 +1,12 @@
 use experimental_rust;
 
 fn main() {
-    let n: u64 = 10;
-    let k: u64 = 5;
-    let current_order: Vec<u64> = vec![];
-    let mut all_orders: Vec<Vec<u64>> = vec![];
+    let n: i64 = 20;
+    let k: i64 = 10;
+    let current_order: Vec<i64> = vec![];
+    let mut all_orders: Vec<Vec<i64>> = vec![];
 
-    // experimental_rust::generate_all_orders(n, k, current_order, &mut all_orders);
+    experimental_rust::generate_all_orders(n, k, current_order, &mut all_orders);
 
-    // println!("{:?}", all_orders[0]);
+    println!("{:?}", all_orders[0]);
 }
