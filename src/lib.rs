@@ -3,8 +3,32 @@ struct Experiment {
     k: i64, 
 }
 
-pub fn factorial(x: u128) -> u128 {
-    (1..=x).product()
+// pub fn count_combinations(n: &i128, k: &i128) -> i128 {
+//     let n = n.clone() as f64;
+//     let k = k.clone() as f64;
+
+//     log_comb = (1..=n).sum() - (n - k).iter().log().sum() - k.iter().log().sum();
+
+// }
+
+pub fn factorial(x: u64) -> u128 {
+    let s = log_factorial(x);
+
+    let s = s.exp().round() as u128;
+    
+    s
+}
+
+pub fn log_factorial(x: u64) -> f64 {
+    let mut s: f64 = 0.0;
+
+    for i in 1..=x {
+        let mut j = i as f64;
+        j = j.ln();
+        s += j;
+    }
+
+    s
 }
 
 pub fn generate_all_orders(n: i64, k: i64, current_order: Vec<i64>, mut all_orders: &mut Vec<Vec<i64>>) {
