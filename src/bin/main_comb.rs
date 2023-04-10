@@ -2,10 +2,10 @@ use experimental_rust::Experiment;
 
 
 fn main() {
-    let n: i64 = 20;
-    let k: i64 = 10;
+    let n = Some(20);
+    let k = Some(10);
 
-    let experiment = Experiment::new(n, k);
+    let experiment = Experiment::new(n, k, None, None);
 
     println!("{:?}", experiment);
 }

@@ -5,13 +5,56 @@ pub struct Experiment {
     n: i64, 
     k: i64,
     n_comb: u128,  
+    x_treatment: Option<Vec<f64>>,
+    x_control: Option<Vec<f64>>,
+}
+
+pub struct BivMean {
+    m_treatment: f64,
+    m_control: f64,
 }
 
 impl Experiment {
-    pub fn new(n: i64, k: i64) -> Experiment {
+    pub fn new(n: Option<i64>, k: Option<i64>, x_treatment: Option<Vec<f64>>, x_control: Option<Vec<f64>>) -> Experiment {
+        let n = match n {
+            Some(x) => x,
+            _ => {
+                let n_treatment = x_treatment.as_ref().unwrap().len();
+                let n_control = x_control.as_ref().unwrap().len() as i64;
+
+                (n_treatment as i64) + n_control
+            }
+        };
+
+        let k = match k {
+            Some(x) => x,
+            _ => {
+                let n_treatment = x_treatment.as_ref().unwrap().len();
+
+                (n_treatment as i64)
+            }
+        };
+
         let n_combs = count_combinations(n, k);
 
-        Experiment { n: n, k: k, n_comb: n_combs }
+        Experiment { n: n, 
+            k: k, 
+            n_comb: n_combs, 
+            x_treatment: x_treatment, 
+            x_control: x_control }
+    }
+
+    pub fn mean(&self) -> BivMean {
+        let x_treatment = self.x_treatment.as_ref().unwrap();
+        let x_control = self.x_control.as_ref().unwrap(); 
+
+        let m_treatment: f64 = x_treatment.iter().sum::<f64>();
+        let m_control: f64 = x_control.iter().sum::<f64>();
+
+        BivMean {
+            m_treatment, 
+            m_control
+        }
     }
 }
 
