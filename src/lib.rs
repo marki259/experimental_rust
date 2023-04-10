@@ -1,18 +1,31 @@
-struct Experiment {
+#[derive(Debug)]
+pub struct Experiment {
     n: i64, 
-    k: i64, 
+    k: i64,
+    n_comb: u128,  
 }
 
-// pub fn count_combinations(n: &i128, k: &i128) -> i128 {
-//     let n = n.clone() as f64;
-//     let k = k.clone() as f64;
+impl Experiment {
+    pub fn new(n: i64, k: i64) -> Experiment {
+        let n_combs = count_combinations(n, k);
 
-//     log_comb = (1..=n).sum() - (n - k).iter().log().sum() - k.iter().log().sum();
+        Experiment { n: n, k: k, n_comb: n_combs }
+    }
+}
 
-// }
+pub fn count_combinations(n: i64, k: i64) -> u128 {
+    let n = n.clone() as u64;
+    let k = k.clone() as u64;
+
+    let log_comb = log_factorial(n) - log_factorial(k) - log_factorial(n-k);
+
+    let val = log_comb.exp().round() as u128;    
+
+    val
+}
 
 pub fn factorial(x: u64) -> u128 {
-    let s = log_factorial(x);
+    let mut s = log_factorial(x);
 
     let s = s.exp().round() as u128;
     
