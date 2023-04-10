@@ -1,3 +1,5 @@
+use rand::{Rng, seq::SliceRandom};
+
 #[derive(Debug)]
 pub struct Experiment {
     n: i64, 
@@ -13,6 +15,26 @@ impl Experiment {
     }
 }
 
+pub fn generate_binary_treatments(n: i64, k: i64) -> Vec<bool> {
+    let n_u: usize = n.try_into().unwrap();
+
+    let mut treatment_vector = vec![false; n_u];
+    let mut index_vector: Vec<i64> = (0..n).collect();
+
+    let mut rng = rand::thread_rng();
+
+    for _ in 0..k {
+        let choice = *index_vector.choose(&mut rng).unwrap();
+        let index = choice as usize;
+
+        treatment_vector[index] = true;
+
+        index_vector.retain(|&x| x != choice);
+    }
+
+    treatment_vector
+}
+
 pub fn count_combinations(n: i64, k: i64) -> u128 {
     let n = n.clone() as u64;
     let k = k.clone() as u64;
@@ -25,7 +47,7 @@ pub fn count_combinations(n: i64, k: i64) -> u128 {
 }
 
 pub fn factorial(x: u64) -> u128 {
-    let mut s = log_factorial(x);
+    let s = log_factorial(x);
 
     let s = s.exp().round() as u128;
     
