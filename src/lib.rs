@@ -66,9 +66,9 @@ pub fn log_factorial(x: u64) -> f64 {
     s
 }
 
-pub fn generate_all_orders(n: i64, k: i64, current_order: Vec<i64>, mut all_orders: &mut Vec<Vec<i64>>) {
+pub fn generate_all_orders(n: i64, k: i64, current_order: Vec<bool>, mut all_orders: &mut Vec<Vec<bool>>) {
     let current_len: i64 = current_order.len().try_into().unwrap();
-    let current_sum: i64 = current_order.iter().sum();
+    let current_sum: i64 = current_order.iter().map(|b| if *b {1} else {0}).sum();
 
     let mut current_order1 = current_order.clone();
     let mut current_order2 = current_order.clone();
@@ -83,8 +83,8 @@ pub fn generate_all_orders(n: i64, k: i64, current_order: Vec<i64>, mut all_orde
         return;
     }
 
-    current_order1.push(1);
-    current_order2.push(0);
+    current_order1.push(true);
+    current_order2.push(false);
 
     generate_all_orders(n, k, current_order1, &mut all_orders);
     generate_all_orders(n, k, current_order2, &mut all_orders);
