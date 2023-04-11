@@ -9,6 +9,7 @@ pub struct Experiment {
     x_control: Option<Vec<f64>>,
 }
 
+#[derive(Debug)]
 pub struct BivMean {
     m_treatment: f64,
     m_control: f64,
@@ -48,8 +49,14 @@ impl Experiment {
         let x_treatment = self.x_treatment.as_ref().unwrap();
         let x_control = self.x_control.as_ref().unwrap(); 
 
-        let m_treatment: f64 = x_treatment.iter().sum::<f64>();
-        let m_control: f64 = x_control.iter().sum::<f64>();
+        let n_treatment = x_treatment.len() as f64;
+        let n_control = x_control.len() as f64;
+
+        let mut m_treatment: f64 = x_treatment.iter().sum::<f64>();
+        let mut m_control: f64 = x_control.iter().sum::<f64>();
+
+        m_treatment /= n_treatment;        
+        m_control /= n_control;
 
         BivMean {
             m_treatment, 

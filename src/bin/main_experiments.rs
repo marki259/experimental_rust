@@ -16,5 +16,7 @@ fn main() {
     let experiment = Experiment::new(None, None, x_treatment, x_control);
 
     println!("{:?}", experiment);
+
+    println!("{:#?}", experiment.mean());
 }
 
