@@ -92,14 +92,15 @@ impl Experiment {
         let mut counter: i64 = 0;
 
         for placebo in all_orders.iter() {
-            let mut filter_bool = placebo.iter();
-            let mut filter_bool_clone = filter_bool.clone();
+            let placebo = placebo.clone();
+            let mut mask = placebo.iter();
+            let mut mask_clone = mask.clone();
 
             let mut x_placebo_treatment: Vec<f64> = x_all.iter().map(|&x| x as f64).collect();
-            x_placebo_treatment.retain(|_| *filter_bool.next().unwrap());
+            x_placebo_treatment.retain(|_| *mask.next().unwrap());
 
             let mut x_placebo_control: Vec<f64> = x_all.iter().map(|&x| x as f64).collect();
-            x_placebo_control.retain(|_| !filter_bool_clone.next().unwrap());
+            x_placebo_control.retain(|_| !mask_clone.next().unwrap());
 
             let placebo_experiment = Experiment::new(
                 None,

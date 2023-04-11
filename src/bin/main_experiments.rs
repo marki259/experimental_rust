@@ -4,7 +4,7 @@ fn main() {
     // let n = Some(20);
     // let k = Some(10);
 
-    let x_treatment = vec![1, 1, 1];
+    let x_treatment = vec![10, 5, 5, 2, 3];
     let x_treatment = x_treatment.iter().map(|&x| x as f64).collect();
     let x_treatment = Some(x_treatment);
     
