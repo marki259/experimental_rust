@@ -77,11 +77,10 @@ impl Experiment {
         let n = self.n;
         let k = self.k;
 
-        let x_treatment = self.x_treatment.as_ref().unwrap();
-        let x_control = self.x_control.as_ref().unwrap();
+        let x_treatment = self.x_treatment.as_ref().unwrap().clone();
+        let x_control = self.x_control.as_ref().unwrap().clone();
 
-        let mut x_all = x_treatment.clone();
-        x_all.extend(x_control.iter());
+        let x_all: Vec<f64> = x_treatment.iter().chain(x_control.iter()).map(|&x| x as f64).collect();
 
         let means = self.mean();
         let observed_effect = means.m_treatment - means.m_control;
@@ -93,20 +92,14 @@ impl Experiment {
         let mut counter: i64 = 0;
 
         for placebo in all_orders.iter() {
-            let mut filter_bool = placebo.into_iter();
-            let mut inverted_filter_bool =
-                placebo.into_iter().map(|p| if *p { false } else { true });
+            let mut filter_bool = placebo.iter();
+            let mut filter_bool_clone = filter_bool.clone();
 
-            let x_placebo_treatment: Vec<f64> = x_all
-                .clone()
-                .into_iter()
-                .filter(|_| filter_bool.next().is_some())
-                .collect();
-            let x_placebo_control: Vec<f64> = x_all
-                .clone()
-                .into_iter()
-                .filter(|_| inverted_filter_bool.next().is_some())
-                .collect();
+            let mut x_placebo_treatment: Vec<f64> = x_all.iter().map(|&x| x as f64).collect();
+            x_placebo_treatment.retain(|_| *filter_bool.next().unwrap());
+
+            let mut x_placebo_control: Vec<f64> = x_all.iter().map(|&x| x as f64).collect();
+            x_placebo_control.retain(|_| !filter_bool_clone.next().unwrap());
 
             let placebo_experiment = Experiment::new(
                 None,
@@ -127,7 +120,6 @@ impl Experiment {
         }
 
         1.0 - ((counter as f64).ln() - (self.n_comb as f64).ln()).exp()
-
     }
 }
 
